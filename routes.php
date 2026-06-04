@@ -31,4 +31,7 @@ if ($controller === 'usuarios') {
             break;
 
     }
-} else 
+} else {
+    echo '<h1>AtendeLab</h1>';
+    echo '<p>Projeto em execução. Use ?controller=usuarios&action=listar para testar.</p>';
+}
