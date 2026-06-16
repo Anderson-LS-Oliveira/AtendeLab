@@ -8,7 +8,7 @@ $senha = '';
 
 try {
    $pdo = new PDO(
-      "mysql:host=($host);port=($porta);dbname=($banco);charset=utf8mb4",
+      "mysql:host=$host;port=$porta;dbname=$banco;charset=utf8",
       $usuario,
       $senha
    );
@@ -16,11 +16,6 @@ try {
    $pdo->setAttribute(
       PDO::ATTR_ERRMODE,
       PDO::ERRMODE_EXCEPTION
-   );
-
-   $pdo->setAttribute(
-      PDO::ATTR_DEFAULT_FETCH_MODE,
-      PDO::ERRMODE_ASSOC
    );
 } catch (PDOException $e) {
  exit('Erro ao conectar com o banco de dados:');
