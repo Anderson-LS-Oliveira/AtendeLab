@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 function usuarioAutenticado(): bool{
 
     return isset($_SESSION['usuario'])
-    && is_array($_SESSION['usuario']);
+        && is_array($_SESSION['usuario']);
 }
 
 function exigirAutenticacao(): void {
@@ -22,9 +22,18 @@ function exigirAutenticacao(): void {
 
 }
 
+function exigirAdministrador(): void {
+    exigirAutenticacao();
+
+    if (($_SESSION['usuario']['perfil'] ?? null) !== 'admin') {
+        http_response_code(403);
+        exit('Acesso negado.');
+    }
+}
+
+
 
 function usuarioAtual(): ?array {
-
     return $_SESSION['usuario'] ?? null;
 
 }
