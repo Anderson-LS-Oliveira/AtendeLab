@@ -19,6 +19,9 @@ class TiposAtendimentosController
 
     public function listar(): void
     {
+        
+        header('Content-Type: application/json; charset=utf-8');
+        
         $sql = 'SELECT id, nome, descricao, status
                 FROM tipos_atendimentos ORDER BY nome';
         $stmt = $this->pdo->query($sql);

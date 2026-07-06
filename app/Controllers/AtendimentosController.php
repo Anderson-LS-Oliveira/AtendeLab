@@ -19,6 +19,9 @@ class AtendimentosController
 
     public function listar(): void
     {
+        
+        header('Content-Type: application/json; charset=utf-8');
+        
         $sql = 'SELECT a.id, p.nome AS pessoa_nome,
                        t.nome AS tipo_nome,
                        u.nome AS responsavel_nome,
@@ -76,12 +79,9 @@ class AtendimentosController
             $_POST['tipo_atendimento_id'] ?? null,
             FILTER_VALIDATE_INT
         );
-        $usuarioId = filter_var(
-            $_POST['usuario_id'] ?? null,
-            FILTER_VALIDATE_INT
-        );
+        $usuarioId = $_SESSION['usuario']['id'] ?? null;
 
-        $descricao = trim($_POST['descricao'] ?? "");
+        $descricao = trim($_POST['descricao'] ?? '');
         $data = $_POST['data_atendimento'] ?? '';
         $horario = $_POST['horario_atendimento'] ?? '';
         $status = $_POST['status'] ?? 'aberto';
@@ -92,7 +92,7 @@ class AtendimentosController
             return;
         }
 
-        if (!in_array($status, ['aberto', 'em andamento'], true)) {
+        if (!in_array($status, ['aberto', 'em_andamento'], true)) {
             $this->json(['erro' => 'Status inicial inválido.'], 422);
             return;
         }
@@ -156,4 +156,5 @@ class AtendimentosController
         $this->json(['mensagem' => 'Status atualizado com sucesso.']);
     }
 
+    
 }

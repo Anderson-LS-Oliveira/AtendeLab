@@ -28,6 +28,8 @@ class AuthController
             exit;
         }
 
+        require_once __DIR__ . '/../Views/layouts/config-view.php';
+
         // Recupera mensagens temporárias da sessão.
         $erro = $_SESSION['erro_login'] ?? null;
         $mensagem = $_SESSION['mensagem'] ?? null;

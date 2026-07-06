@@ -21,7 +21,10 @@ class PessoasController
 
     public function listar(): void
     {
-        $sql = 'SELECT id, nome, documento, telefone, periodo, status, atualizado_em
+        
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $sql = 'SELECT id, nome, documento, telefone, periodo, curso, email, status, atualizado_em
                 FROM pessoas
                 ORDER BY nome';
 
@@ -33,7 +36,7 @@ class PessoasController
 
     public function buscar(): void
     {
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDADE_INT);
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (!$id) {
             $this->json(['erro' => 'ID inválido'], 400);
             return;
@@ -147,7 +150,7 @@ class PessoasController
 
     public function inativar(): void
     {
-        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDADE_INT);
+        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id){
             $this->json(['erro' => 'ID inválido.'], 422);
             return;
@@ -158,6 +161,32 @@ class PessoasController
         );
         $stmt->execute(['id' => $id]);
         $this->json(['mensagem' => 'Pessoa inativada com sucesso!']);
+    }
+
+    public function excluir(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        // Exclusão por ID recebido no corpo da requisição.
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'ID inválido.']);
+            return;
+        }
+
+        try {
+            $sql = 'DELETE FROM pessoas WHERE id = :id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo json_encode(['mensagem' => 'Pessoa excluído com sucesso.'], JSON_UNESCAPED_UNICODE);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['erro' => 'Erro ao excluir usuário.']);
+        }
     }
 
 }
